@@ -4,13 +4,16 @@ from flask import g
 from app.api.errors import error_response
 from app.models.user import User
 
+
 basic_auth = HTTPBasicAuth()
+token_auth = HTTPTokenAuth()
 
 
 @basic_auth.verify_password
 def verify_password(username, password):
     '''用于检查用户提供的用户名和密码'''
     user = User.query.filter_by(username=username).first()
+    print(user)
     if user is None:
         return False
     g.current_user = user
@@ -21,9 +24,6 @@ def verify_password(username, password):
 def basic_auth_error():
     '''用于在认证失败的情况下返回错误响应'''
     return error_response(401)
-
-
-token_auth = HTTPTokenAuth()
 
 
 @token_auth.verify_token
