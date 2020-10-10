@@ -5,7 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 # Flask-SQLAlchemy plugin
 db = SQLAlchemy()
 
-
+# 通用数据转换JSON格式
 class PaginatedAPIMixin(object):
     @staticmethod
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
