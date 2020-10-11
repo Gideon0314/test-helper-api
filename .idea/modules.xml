@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/test_helper_api.iml" filepath="$PROJECT_DIR$/.idea/test_helper_api.iml" />
+      <module fileurl="file://D:/PycharmProjects/vue-element-admin-i18n/.idea/vue-element-admin-i18n.iml" filepath="D:/PycharmProjects/vue-element-admin-i18n/.idea/vue-element-admin-i18n.iml" />
     </modules>
   </component>
 </project>

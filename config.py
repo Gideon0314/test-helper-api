@@ -6,6 +6,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 a = load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
 
 
+
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+
 # class Config(object):
 #     pass
 
@@ -18,8 +21,6 @@ PASSWORD = '123456'
 SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_POOL_SIZE = 1000
-
-SECRET_KEY = 'gideontest123'
 
 
 # SESSION_TYPE = 'sqlalchemy'

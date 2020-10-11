@@ -2,15 +2,14 @@
 import os
 import base64
 from datetime import datetime, timedelta
-from flask import url_for
+import jwt
+from flask import url_for, current_app
 from . import db, PaginatedAPIMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(PaginatedAPIMixin, db.Model):
 
-    token = db.Column(db.String(32), index=True, unique=True)
-    token_expiration = db.Column(db.DateTime)
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -31,6 +30,31 @@ class User(PaginatedAPIMixin, db.Model):
             data['email'] = self.email
         return data
 
+    def get_jwt(self, expires_in=600):
+        now = datetime.utcnow()
+        payload = {
+            'id': self.id,
+            'name': self.username,
+            'exp': now + timedelta(seconds=expires_in),
+            'iat': now
+        }
+        return jwt.encode(
+            payload,
+            current_app.config['SECRET_KEY'],
+            algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def verify_jwt(token):
+        try:
+            payload = jwt.decode(
+                token,
+                current_app.config['SECRET_KEY'],
+                algorithms=['HS256'])
+        except (jwt.exceptions.ExpiredSignatureError, jwt.exceptions.InvalidSignatureError) as e:
+            # Token过期，或被人修改，那么签名验证也会失败
+            return None
+        return User.query.get(payload.get('user_id'))
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -43,22 +67,3 @@ class User(PaginatedAPIMixin, db.Model):
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
             self.set_password(data['password'])
-
-    def get_token(self, expires_in=3600):
-        now = datetime.utcnow()
-        if self.token and self.token_expiration > now + timedelta(seconds=60):
-            return self.token
-        self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
-        self.token_expiration = now + timedelta(seconds=expires_in)
-        db.session.add(self)
-        return self.token
-
-    def revoke_token(self):
-        self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
-
-    @staticmethod
-    def check_token(token):
-        user = User.query.filter_by(token=token).first()
-        if user is None or user.token_expiration < datetime.utcnow():
-            return None
-        return user
