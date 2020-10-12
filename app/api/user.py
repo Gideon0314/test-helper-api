@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from app import db
 import re
-from flask import request, jsonify
+from flask import request, jsonify, g
 from app import db
 from app.api import bp
 from app.api.auth import token_auth
@@ -13,10 +13,10 @@ from app.models.user import User
 @token_auth.login_required
 def get_user():
     """返回用户信息"""
-    id = request.args.get('id')
-    user = User.query.get_or_404(id)
-    if g.current_user == user:
-        return jsonify(User.query.get_or_404(id).to_dict())
+    id = g.user_id
+    # user = User.query.get_or_404(id)
+    # if g.current_user == user:
+    #     return jsonify(User.query.get_or_404(id).to_dict())
     return jsonify(User.query.get_or_404(id).to_dict())
 
 

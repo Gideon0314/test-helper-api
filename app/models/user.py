@@ -20,11 +20,17 @@ class User(PaginatedAPIMixin, db.Model):
 
     def to_dict(self, include_email=False):
         data = {
-            'id': self.id,
-            'username': self.username,
-            '_links': {
-                'self': url_for('api.get_user', id=self.id)
-            }
+            "status": 200,
+            "data":
+                {
+                'id': self.id,
+                'name': self.username,
+                'roles': ['admin'],
+                'avatar': "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+                # '_links': {
+                #     'self': url_for('api.get_user', id=self.id)
+                # }
+                }
         }
         if include_email:
             data['email'] = self.email
@@ -53,7 +59,9 @@ class User(PaginatedAPIMixin, db.Model):
         except (jwt.exceptions.ExpiredSignatureError, jwt.exceptions.InvalidSignatureError) as e:
             # Token过期，或被人修改，那么签名验证也会失败
             return None
-        return User.query.get(payload.get('user_id'))
+        if User.query.get(payload.get('id')):
+            return payload
+        # return User.query.get(payload.get('id'))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

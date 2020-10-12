@@ -30,14 +30,13 @@ def basic_auth_error():
 @token_auth.verify_token
 def verify_token(token):
     '''用于检查用户请求是否有token，并且token真实存在，还在有效期内'''
-    print(token)
-    g.current_user = User.verify_jwt(token) if token else None
-    print(g.current_user)
+    payload = User.verify_jwt(token) if token else None
+    g.user_id = payload['id']
     # if g.current_user:
         # 每次认证通过后（即将访问资源API），更新 last_seen 时间
         # g.current_user.ping()
         # db.session.commit()
-    return g.current_user is not None
+    return g.user_id is not None
 
 
 @token_auth.error_handler
