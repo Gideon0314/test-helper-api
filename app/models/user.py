@@ -27,9 +27,9 @@ class User(PaginatedAPIMixin, db.Model):
                 'name': self.username,
                 'roles': [1],
                 'avatar': "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-                # '_links': {
-                #     'self': url_for('api.get_user', id=self.id)
-                # }
+                '_links': {
+                    'self': url_for('web.get_user')
+                }
                 }
         }
         if include_email:

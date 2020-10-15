@@ -9,6 +9,7 @@ from . import bp
 @basic_auth.login_required
 def get_token():
     token = g.current_user.get_jwt()
+    # g.user_id.ping()
     db.session.commit()
     return jsonify(
         {

@@ -23,12 +23,13 @@ def project_list_json(data):
         )
     return list
 
-@bp.route('/project/list/<int:page>', methods=['GET', 'POST'])
-def project_list(page):
+@bp.route('/project/list', methods=['GET'])
+def project_list():
     """ 项目列表 """
-
+    # 页码
+    page = int(request.args.get('page'))
     # 页码上限
-    page_size = 10
+    page_size = int(request.args.get('limit'))
     # 查询
     name = request.args.get('name', '')
     if name:
