@@ -14,14 +14,25 @@ def project_list_json(data):
     for item in data:
         list.append(
             {
-                'version': item.version,
-                'env': item.env,
-                'name': item.name,
                 'id': item.id,
+                'project': item.name,
                 'swagger_url': item.swagger_url,
+                'version': item.version,
+                'type': item.env,
+                'status': item.docs_state,
             }
         )
-    return list
+    return jsonify(
+        {
+            "status": 200,
+            "data": {
+                'total': 1,
+                'items': list,
+            },
+
+        }
+        )
+
 
 @bp.route('/project/list', methods=['GET'])
 def project_list():
@@ -36,7 +47,7 @@ def project_list():
         page_data = Project.query.filter_by(name=Project.name.contains(name), is_valid=True).paginate(page=page, per_page=page_size)
     else:
         page_data = Project.query.filter_by(is_valid=True).paginate(page=page, per_page=page_size)
-    return jsonify(project_list_json(page_data.items))
+    return project_list_json(page_data.items)
 
 
 # @bp.route('/project/api_docs_list/<int:page>')
