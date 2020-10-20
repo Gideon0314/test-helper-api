@@ -6,6 +6,7 @@ from flask import request, redirect, url_for, abort, jsonify
 # from app.models.api_docs import ApiDocs
 # from app.models import db
 # from app.spider.get_api_docs import ApiDocsHelper
+from app import db
 from app.models.project import Project
 from . import bp
 
@@ -18,8 +19,9 @@ def project_list_json(data):
                 'project': item.name,
                 'swagger_url': item.swagger_url,
                 'version': item.version,
-                'type': item.env,
+                'env': item.env,
                 'status': item.docs_state,
+                'timestamp': item.updated_at
             }
         )
     return jsonify(
@@ -29,7 +31,6 @@ def project_list_json(data):
                 'total': 1,
                 'items': list,
             },
-
         }
         )
 
@@ -49,6 +50,25 @@ def project_list():
         page_data = Project.query.filter_by(is_valid=True).paginate(page=page, per_page=page_size)
     return project_list_json(page_data.items)
 
+
+@bp.route('/project/add', methods=['POST'])
+def project_add():
+    """ 项目添加 """
+    data = request.get_json()
+
+    project_data = Project(
+        name=data['project'],
+        swagger_url=data['swagger_url'],
+        env=data['env'],
+    )
+    db.session.add(project_data)
+    db.session.commit()
+    return jsonify(
+        {
+            "status": 200,
+            "data": "success"
+        }
+        )
 
 # @bp.route('/project/api_docs_list/<int:page>')
 # def api_docs_list(page=1):
