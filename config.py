@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
 
 HOSTNAME = '127.0.0.1'
 PORT = '3306'
-DATABASE = 'pyswaggerhelper'
+DATABASE = 'test_helper'
 USERNAME = 'root'
 PASSWORD = '123456'
 

@@ -1,15 +1,15 @@
 # -*- coding: UTF-8 -*-
 import uuid
-from . import db
+from . import db, PaginatedAPIMixin
 
 
-class Project(db.Model):
+class Project(PaginatedAPIMixin, db.Model):
     """ 项目列表 """
     __tablename__ = 'project'
 
     id = db.Column(db.String(128), primary_key=True, default=uuid.uuid4, nullable=False, unique=True)
     # 项目名称
-    name = db.Column(db.String(128), nullable=False)
+    project = db.Column(db.String(128), nullable=False)
     # 项目环境（开发/测试/预生产/生产）
     env = db.Column(db.String(128), nullable=False)
     # 项目版本
@@ -26,3 +26,21 @@ class Project(db.Model):
     created_at = db.Column(db.DateTime)
     # 最后修改的时间
     updated_at = db.Column(db.DateTime, index=True)
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'project': self.project,
+            'swagger_url': self.swagger_url,
+            'version': self.version,
+            'env': self.env,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'status': self.docs_state
+        }
+        return data
+
+    def from_dict(self, data):
+        for field in ['project', 'env', 'swagger_url', 'created_at']:
+            if field in data:
+                setattr(self, field, data[field])
