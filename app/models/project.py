@@ -18,6 +18,8 @@ class Project(PaginatedAPIMixin, db.Model):
     swagger_url = db.Column(db.NVARCHAR(500), nullable=False)
     # 获取Api状态
     docs_state = db.Column(db.Integer, default=0)
+    # 接口更新信息
+    update_info = db.Column(db.Text)
     # 逻辑删除
     is_valid = db.Column(db.Boolean, default=True)
     # 排序

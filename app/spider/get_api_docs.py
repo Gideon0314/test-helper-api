@@ -1,12 +1,11 @@
 # -*- coding: UTF-8 -*-
 from datetime import datetime
 import requests
-from flask import flash
 from sqlalchemy import and_
-from back_end.app import db
-from back_end.app.models.api_docs import ApiDocs
-from back_end.app.models.definitions import Definitions
-from back_end.app.models.project import Project
+from app import db
+from app.models.api_docs import ApiDocs
+from app.models.definitions import Definitions
+from app.models.project import Project
 import re
 import sys
 
@@ -15,10 +14,11 @@ Author = "Gideon"
 
 class ApiDocsHelper:
 
-    def __init__(self, swagger_url, pid):
+    def __init__(self, swagger_url, project_id):
         sys.setrecursionlimit(1000000)
         self.swagger_url = swagger_url
-        self.pid = pid
+        self.project_id = project_id
+        self.update_info = []
 
     def api_docs_url(self):
         url = re.findall(r"(.*)/swagger-ui.html", self.swagger_url)[0] + "/v2/api-docs"
@@ -45,7 +45,7 @@ class ApiDocsHelper:
                 data['properties'] = str(v['properties'])
             else:
                 data['properties'] = None
-                
+
             if v.__contains__('type'):
                 data['type'] = str(v['type'])
             else:
@@ -59,7 +59,7 @@ class ApiDocsHelper:
             exist_data = exist_data[0]
             if str(data['title']) == str(exist_data.title):
                 exist_data.id = exist_data.id
-                exist_data.project_id = self.pid
+                exist_data.project_id = self.project_id
                 exist_data.title = str(data['title'])
                 exist_data.properties = str(data['properties'])
                 exist_data.type = data['type']
@@ -68,7 +68,7 @@ class ApiDocsHelper:
                 db.session.close()
         else:
             data = Definitions(
-                project_id=self.pid,
+                project_id=self.project_id,
                 title=str(data['title']),
                 properties=str(data['properties']),
                 type=str(data['type']),
@@ -122,11 +122,10 @@ class ApiDocsHelper:
 
                 else:
                     api['responses_definitions'] = None
-
                 self.db_tools(api)
-
         self.docs_version_updated(version)
         self.get_definitions()
+        self.docs_update_info(self.update_info)
 
     def db_tools(self, api):
         # 更新
@@ -141,12 +140,12 @@ class ApiDocsHelper:
 
             if a and b:
 
-                flash(f'该接口未更新: {api["summary"]}  {api["path"]} ')
+                print(f'该接口未更新: {api["summary"]}  {api["path"]} ')
 
             else:
                 # docs 状态
                 state = 1
-                exist_data.project_id = str(self.pid)
+                exist_data.project_id = str(self.project_id)
                 exist_data.api_summary = api["summary"]
                 exist_data.tags = api["tags"]
                 exist_data.path = api["path"]
@@ -157,13 +156,13 @@ class ApiDocsHelper:
                 db.session.add(exist_data)
                 self.docs_state_change(state)
                 db.session.commit()
-                flash(f'{api["summary"]}该接口已更新')
+                self.update_info.append(f'{api["summary"]}该接口已更新')
                 db.session.close()
 
         else:
             # docs 状态
             project_data = ApiDocs(
-                project_id=str(self.pid),
+                project_id=str(self.project_id),
                 api_summary=api["summary"],
                 tags=api["tags"],
                 path=api["path"],
@@ -172,10 +171,10 @@ class ApiDocsHelper:
                 responses_definitions=str(api["responses_definitions"]),
                 created_at=datetime.now()
             )
-            flash(f'该接口不存在，新增数据: {api["summary"]}  {api["path"]}')
+            self.update_info.append(f'该接口不存在，新增数据: {api["summary"]}  {api["path"]}')
             db.session.add(project_data)
             db.session.commit()
-            flash(f'{api["summary"]}该接口已更新')
+            self.update_info.append(f'{api["summary"]}该接口已更新')
 
     # def re_ref(self, data):
     #     rd = re.sub(r"(, |)'\$ref': '#/.*?'", '', str(data))
@@ -184,7 +183,10 @@ class ApiDocsHelper:
     #     return rd
 
     def docs_state_change(self, state):
-        return Project.query.filter_by(id=self.pid).update({"docs_state": state})
+        return Project.query.filter_by(id=self.project_id).update({"docs_state": state})
 
     def docs_version_updated(self, version):
-        return Project.query.filter_by(id=self.pid).update({"version": version})
+        return Project.query.filter_by(id=self.project_id).update({"version": version})
+
+    def docs_update_info(self, update_info):
+        return Project.query.filter_by(id=self.project_id).update({"update_info": update_info})

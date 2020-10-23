@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from wtforms import ValidationError
-from back_end.app.models.project import Project
+from app.models.project import Project
 
 
 class Validata_helper:

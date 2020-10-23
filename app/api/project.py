@@ -10,18 +10,18 @@ from . import bp
 @bp.route('/project/list', methods=['GET'])
 def project_list():
     """ 项目列表 """
+    filterlist = []
     page = int(request.args.get('page'))
     per_page = int(request.args.get('limit'))
     project = request.args.get('project', '')
     env = request.args.get('env', '')
-    filterList = []
-    filterList.append(Project.is_valid==True)
+    filterlist.append(Project.is_valid==True)
     if project:
-        filterList.append(Project.project.like('%' + project + '%'))
+        filterlist.append(Project.project.like('%' + project + '%'))
     if env:
-        filterList.append(Project.env == env)
-    data = Project.query.filter(*filterList)
-    if (project and env) is None:
+        filterlist.append(Project.env == env)
+    data = Project.query.filter(*filterlist)
+    if project is None and env is None:
         data = Project.query.filter_by(is_valid=True)
     data = Project.to_collection_dict(data, page, per_page, 'web.project_list')
     return jsonify(data)
