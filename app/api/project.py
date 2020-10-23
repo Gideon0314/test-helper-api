@@ -4,6 +4,7 @@ from flask import request, jsonify
 from app import db
 from app.api.errors import bad_request, error_response, not_found_error
 from app.models.project import Project
+from app.spider.get_api_docs import ApiDocsHelper
 from . import bp
 
 
@@ -82,6 +83,26 @@ def project_del():
         )
 
 
+@bp.route('/project/getapidocs', methods=['POST'])
+def get_api_docs():
+    """爬取Swagger"""
+    project_data = request.get_json()
+    project_id = project_data['id']
+    pj_info = Project.query.filter_by(id=project_id).first_or_404()
+    if pj_info is None:
+        return not_found_error(404)
+    swagger_url = pj_info.swagger_url
+    project_id = pj_info.id
+    ApiDocsHelper(swagger_url, project_id).api_info()
+    # flash('', 'success')
+    return jsonify(
+        {
+            "status": 200,
+            "data": "success"
+        }
+        )
+
+
 # @bp.route('/project/api_docs_list/<int:page>')
 # def api_docs_list(page=1):
 #     """接口信息列表 """
@@ -103,16 +124,3 @@ def project_del():
 #     """项目及接口详情"""
 #     pj_detail = Project.query.filter_by(id=project_id).first_or_404()
 #     return render_template('project/project_detail.html', pj_detail=pj_detail)
-
-#
-# @bp.route('/project/get_api_docs/<project_id>', methods=['GET', 'POST'])
-# def get_api_docs(project_id):
-#     """爬取Swagger"""
-#     pj_info = Project.query.filter_by(id=project_id).first_or_404()
-#     if pj_info is None:
-#         abort(404)
-#     swagger_url = pj_info.swagger_url
-#     project_id = pj_info.id
-#     ApiDocsHelper(swagger_url, project_id).api_info()
-#     # flash('', 'success')
-#     return redirect(url_for('bp.project_list', page=1))
