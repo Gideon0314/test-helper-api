@@ -34,8 +34,8 @@ class Project(PaginatedAPIMixin, db.Model):
             'swagger_url': self.swagger_url,
             'version': self.version,
             'env': self.env,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
+            'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else self.created_at,
+            'updated_at': self.updated_at.strftime("%Y-%m-%d %H:%M:%S") if self.updated_at else self.updated_at,
             'status': self.docs_state
         }
         return data

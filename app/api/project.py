@@ -13,11 +13,17 @@ def project_list():
     page = int(request.args.get('page'))
     per_page = int(request.args.get('limit'))
     project = request.args.get('project', '')
+    env = request.args.get('env', '')
+    filterList = []
+    filterList.append(Project.is_valid==True)
     if project:
-        page_data = Project.query.filter_by(name=Project.name.contains(project), is_valid=True)
-    else:
-        page_data = Project.query.filter_by(is_valid=True)
-    data = Project.to_collection_dict(page_data, page, per_page, 'web.project_list')
+        filterList.append(Project.project.like('%' + project + '%'))
+    if env:
+        filterList.append(Project.env == env)
+    data = Project.query.filter(*filterList)
+    if (project and env) is None:
+        data = Project.query.filter_by(is_valid=True)
+    data = Project.to_collection_dict(data, page, per_page, 'web.project_list')
     return jsonify(data)
 
 
@@ -27,7 +33,7 @@ def project_add():
     data = request.get_json()
     if Project.query.filter_by(swagger_url=data.get('swagger_url', None), is_valid=True).first():
         return bad_request('项目Swagger地址已存在')
-    data['created_at'] = datetime.utcnow()
+    data['created_at'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
     project_data = Project()
     project_data.from_dict(data)
     db.session.add(project_data)
