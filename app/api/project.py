@@ -83,7 +83,7 @@ def project_del():
         )
 
 
-@bp.route('/project/getapidocs', methods=['POST'])
+@bp.route('/project/get_api_docs', methods=['POST'])
 def get_api_docs():
     """爬取Swagger"""
     project_data = request.get_json()
@@ -94,7 +94,6 @@ def get_api_docs():
     swagger_url = pj_info.swagger_url
     project_id = pj_info.id
     ApiDocsHelper(swagger_url, project_id).api_info()
-    # flash('', 'success')
     return jsonify(
         {
             "status": 200,

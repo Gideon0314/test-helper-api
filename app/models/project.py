@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import uuid
 from . import db, PaginatedAPIMixin
-
+from sqlalchemy.dialects.mysql import LONGTEXT
 
 class Project(PaginatedAPIMixin, db.Model):
     """ 项目列表 """
@@ -19,7 +19,7 @@ class Project(PaginatedAPIMixin, db.Model):
     # 获取Api状态
     docs_state = db.Column(db.Integer, default=0)
     # 接口更新信息
-    update_info = db.Column(db.Text)
+    update_info = db.Column(db.UnicodeText)
     # 逻辑删除
     is_valid = db.Column(db.Boolean, default=True)
     # 排序

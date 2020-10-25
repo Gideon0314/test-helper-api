@@ -123,9 +123,13 @@ class ApiDocsHelper:
                 else:
                     api['responses_definitions'] = None
                 self.db_tools(api)
+
         self.docs_version_updated(version)
-        self.get_definitions()
         self.docs_update_info(self.update_info)
+        date = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.docs_updated_at(date)
+        self.get_definitions()
+
 
     def db_tools(self, api):
         # 更新
@@ -144,7 +148,7 @@ class ApiDocsHelper:
 
             else:
                 # docs 状态
-                state = 1
+
                 exist_data.project_id = str(self.project_id)
                 exist_data.api_summary = api["summary"]
                 exist_data.tags = api["tags"]
@@ -153,10 +157,10 @@ class ApiDocsHelper:
                 exist_data.requests_definitions = str(api["requests_definitions"])
                 exist_data.responses_definitions = str(api["responses_definitions"])
                 exist_data.updated = datetime.now()
-                db.session.add(exist_data)
-                self.docs_state_change(state)
-                db.session.commit()
+                self.docs_state_change(state=1)
                 self.update_info.append(f'{api["summary"]}该接口已更新')
+                db.session.add(exist_data)
+                db.session.commit()
                 db.session.close()
 
         else:
@@ -172,9 +176,12 @@ class ApiDocsHelper:
                 created_at=datetime.now()
             )
             self.update_info.append(f'该接口不存在，新增数据: {api["summary"]}  {api["path"]}')
+            self.docs_state_change(state=1)
+            date = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            self.docs_updated_at(date)
+            self.update_info.append(f'{api["summary"]}该接口已更新')
             db.session.add(project_data)
             db.session.commit()
-            self.update_info.append(f'{api["summary"]}该接口已更新')
 
     # def re_ref(self, data):
     #     rd = re.sub(r"(, |)'\$ref': '#/.*?'", '', str(data))
@@ -189,4 +196,7 @@ class ApiDocsHelper:
         return Project.query.filter_by(id=self.project_id).update({"version": version})
 
     def docs_update_info(self, update_info):
-        return Project.query.filter_by(id=self.project_id).update({"update_info": update_info})
+        return Project.query.filter_by(id=self.project_id).update({"update_info": str(update_info)})
+
+    def docs_updated_at(self, updated_at):
+        return Project.query.filter_by(id=self.project_id).update({"updated_at": str(updated_at)})
