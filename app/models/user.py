@@ -36,7 +36,7 @@ class User(PaginatedAPIMixin, db.Model):
             data['email'] = self.email
         return data
 
-    def get_jwt(self, expires_in=600):
+    def get_jwt(self, expires_in=6000):
         now = datetime.utcnow()
         payload = {
             'id': self.id,

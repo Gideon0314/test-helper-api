@@ -14,10 +14,11 @@ Author = "Gideon"
 
 class ApiDocsHelper:
 
-    def __init__(self, swagger_url, project_id):
+    def __init__(self, swagger_url, project_id, docs_status):
         sys.setrecursionlimit(1000000)
         self.swagger_url = swagger_url
         self.project_id = project_id
+        self.docs_status = docs_status
         self.update_info = []
 
     def api_docs_url(self):
@@ -123,13 +124,10 @@ class ApiDocsHelper:
                 else:
                     api['responses_definitions'] = None
                 self.db_tools(api)
-
+        self.docs_update_info(self.update_info) if self.docs_status == 1 else None
+        self.docs_updated_at(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         self.docs_version_updated(version)
-        self.docs_update_info(self.update_info)
-        date = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-        self.docs_updated_at(date)
         self.get_definitions()
-
 
     def db_tools(self, api):
         # 更新
@@ -157,7 +155,7 @@ class ApiDocsHelper:
                 exist_data.requests_definitions = str(api["requests_definitions"])
                 exist_data.responses_definitions = str(api["responses_definitions"])
                 exist_data.updated = datetime.now()
-                self.docs_state_change(state=1)
+                self.docs_state_change(state=2)
                 self.update_info.append(f'{api["summary"]}该接口已更新')
                 db.session.add(exist_data)
                 db.session.commit()
@@ -176,7 +174,7 @@ class ApiDocsHelper:
                 created_at=datetime.now()
             )
             self.update_info.append(f'该接口不存在，新增数据: {api["summary"]}  {api["path"]}')
-            self.docs_state_change(state=1)
+            self.docs_state_change(state=2)
             date = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
             self.docs_updated_at(date)
             self.update_info.append(f'{api["summary"]}该接口已更新')
@@ -196,6 +194,10 @@ class ApiDocsHelper:
         return Project.query.filter_by(id=self.project_id).update({"version": version})
 
     def docs_update_info(self, update_info):
+        project_data = Project.query.filter_by(id=self.project_id, is_valid=True).first()
+        status = project_data['status']
+        if status == 0:
+            return ''
         return Project.query.filter_by(id=self.project_id).update({"update_info": str(update_info)})
 
     def docs_updated_at(self, updated_at):

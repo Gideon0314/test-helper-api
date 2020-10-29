@@ -34,7 +34,7 @@ def project_add():
     data = request.get_json()
     if Project.query.filter_by(swagger_url=data.get('swagger_url', None), is_valid=True).first():
         return bad_request('项目Swagger地址已存在')
-    data['created_at'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    data['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     project_data = Project()
     project_data.from_dict(data)
     db.session.add(project_data)
@@ -93,7 +93,8 @@ def get_api_docs():
         return not_found_error(404)
     swagger_url = pj_info.swagger_url
     project_id = pj_info.id
-    ApiDocsHelper(swagger_url, project_id).api_info()
+    docs_status = pj_info.docs_state
+    ApiDocsHelper(swagger_url, project_id, docs_status).api_info()
     return jsonify(
         {
             "status": 200,
