@@ -2,13 +2,14 @@
 from datetime import datetime
 from flask import request, jsonify
 from app import db
+from app.api.auth import token_auth
 from app.api.errors import bad_request, error_response, not_found_error
 from app.models.project import Project
 from app.spider.get_api_docs import ApiDocsHelper
 from . import bp
 
-
 @bp.route('/project/list', methods=['GET'])
+@token_auth.login_required
 def project_list():
     """ 项目列表 """
     filterlist = []
@@ -29,6 +30,7 @@ def project_list():
 
 
 @bp.route('/project/add', methods=['POST'])
+@token_auth.login_required
 def project_add():
     """ 项目添加 """
     data = request.get_json()
@@ -48,6 +50,7 @@ def project_add():
 
 
 @bp.route('/project/update', methods=['POST'])
+@token_auth.login_required
 def project_edit():
     """项目编辑"""
     project_data = request.get_json()
