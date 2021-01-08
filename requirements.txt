@@ -41,3 +41,4 @@ wrapt==1.12.1
 WTForms
 gunicorn
 mysqlclient
+gevent
