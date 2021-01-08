@@ -1,0 +1,31 @@
+version: "1.0"
+services:
+
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=666666
+      - MYSQL_DATABASE=test_helper
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=666666
+    ports:
+      - "3306:3306"
+    volumes:
+      - "$PWD/docker/mysql/conf.d:/etc/mysql/conf.d"
+      - "$PWD/docker/mysql/data:/var/lib/mysql"
+
+  test_helper_api:
+    image: test_helper_api:1.0
+    links:
+      - mysql:mysql-server
+    environment:
+      - DATABASE_URL=mysql://root:666666@mysql-server/test_helper
+    ports:
+      - "5000:5000"
+
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "$PWD/docker/nginx/data:/usr/share/nginx/html"
