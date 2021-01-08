@@ -8,6 +8,7 @@ from app.models.project import Project
 from app.spider.get_api_docs import ApiDocsHelper
 from . import bp
 
+
 @bp.route('/project/list', methods=['GET'])
 @token_auth.login_required
 def project_list():
