@@ -12,7 +12,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
 # class Config(object):
 #     pass
 
-HOSTNAME = '172.17.223.127'
+HOSTNAME = '123.56.117.178'
 PORT = '3306'
 DATABASE = 'test_helper'
 USERNAME = 'root'
