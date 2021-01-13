@@ -7,7 +7,7 @@ a = load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
 
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # class Config(object):
 #     pass
