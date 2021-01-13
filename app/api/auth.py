@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from flask import g
-
 from app import db
 from app.api.errors import error_response
 from app.models.user import User
