@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 basedir = os.path.abspath(os.path.dirname(__file__))
 a = load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
 
-
+DEBUG = os.environ.get('FLASK_DEBUG')
 
 SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
 
@@ -20,7 +20,7 @@ PASSWORD = '666666'
 
 SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_POOL_SIZE = 1000
+# SQLALCHEMY_POOL_SIZE = 1000
 
 
 # SESSION_TYPE = 'sqlalchemy'
