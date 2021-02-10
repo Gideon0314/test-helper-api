@@ -1,44 +1,62 @@
 alembic==1.4.3
+allure-pytest==2.8.32
+allure-python-commons==2.8.32
 astroid==2.4.2
+atomicwrites==1.4.0
+attrs==20.3.0
 brotlipy==0.7.0
+cachetools==4.2.1
 certifi==2020.12.5
-cffi
-chardet
+cffi @ file:///C:/ci/cffi_1606255208697/work
+chardet @ file:///C:/ci/chardet_1607690654534/work
 click==7.1.2
 colorama==0.4.3
-cryptography
+cryptography @ file:///C:/ci/cryptography_1607637849569/work
+cssselect==1.1.0
+cssutils==1.0.2
 Flask==1.1.2
 Flask-Cors==3.0.10
 Flask-HTTPAuth==4.2.0
 Flask-Migrate==2.5.3
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.4
-idna
+gunicorn==20.0.4
+idna @ file:///tmp/build/80754af9/idna_1593446292537/work
+iniconfig==1.1.1
 isort==4.3.21
 itsdangerous==1.1.0
 Jinja2==2.11.2
 lazy-object-proxy==1.4.3
+lxml==4.6.2
 Mako==1.1.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
-pycparser
-PyJWT==1.7.1
+mysqlclient==2.0.3
+packaging==20.9
+pluggy==0.13.1
+premailer==3.7.0
+py==1.10.0
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+PyJWT==2.0.0
 pylint==2.5.3
-pyOpenSSL
-PySocks
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
+pyparsing==2.4.7
+PySocks @ file:///C:/ci/pysocks_1605287845585/work
+pytest==6.2.2
+pytest-rerunfailures==9.1.1
 python-dateutil==2.8.1
 python-dotenv==0.15.0
 python-editor==1.0.4
-requests
-six
+PyYAML==5.4.1
+requests @ file:///tmp/build/80754af9/requests_1608241421344/work
+selenium==3.141.0
+six @ file:///C:/ci/six_1605187374963/work
 SQLAlchemy==1.3.22
 toml==0.10.1
-urllib3
+urllib3 @ file:///tmp/build/80754af9/urllib3_1606938623459/work
 Werkzeug==1.0.1
-win-inet-pton
+win-inet-pton @ file:///C:/ci/win_inet_pton_1605306167264/work
 wincertstore==0.2
 wrapt==1.12.1
-WTForms
-gunicorn
-mysqlclient
-gevent
+WTForms @ file:///tmp/build/80754af9/wtforms_1597707484216/work
+yagmail==0.14.245
