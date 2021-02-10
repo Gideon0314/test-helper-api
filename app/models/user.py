@@ -26,7 +26,7 @@ class User(PaginatedAPIMixin, db.Model):
                 'id': self.id,
                 'name': self.username,
                 'roles': [1],
-                'avatar': "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+                'avatar': "https://s3.ax1x.com/2021/01/10/s13xeO.jpg",
                 '_links': {
                     'self': url_for('web.get_user')
                 }
@@ -44,6 +44,7 @@ class User(PaginatedAPIMixin, db.Model):
             'exp': now + timedelta(seconds=expires_in),
             'iat': now
         }
+        print(payload)
         return jwt.encode(
             payload,
             current_app.config['SECRET_KEY'],

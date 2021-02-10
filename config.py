@@ -7,12 +7,12 @@ a = load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
 
 DEBUG = os.environ.get('FLASK_DEBUG')
 
-SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # class Config(object):
 #     pass
 
-HOSTNAME = '123.56.117.178'
+HOSTNAME = ''
 PORT = '3306'
 DATABASE = 'test_helper'
 USERNAME = 'root'
@@ -25,8 +25,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # SESSION_TYPE = 'sqlalchemy'
 
-INQUIRY_EMAIL = 'tjd0314@126.com'
-INQUIRY_EMAIL_PW = 'SQDXTUHPZZORDIXL'
+INQUIRY_EMAIL = ''
+INQUIRY_EMAIL_PW = ''
 INQUIRY_EMAIL_LIST = [
     'gideon_tao0119@chinakej.top',
 ]

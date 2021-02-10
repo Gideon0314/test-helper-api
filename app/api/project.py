@@ -70,6 +70,7 @@ def project_edit():
 
 
 @bp.route('/project/delete', methods=['DELETE'])
+@token_auth.login_required
 def project_del():
     """项目删除"""
     project_id = request.get_json()['id']
@@ -88,6 +89,7 @@ def project_del():
 
 
 @bp.route('/project/get_api_docs', methods=['POST'])
+@token_auth.login_required
 def get_api_docs():
     """爬取Swagger"""
     project_data = request.get_json()
