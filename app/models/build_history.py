@@ -20,11 +20,11 @@ class BuildHistory(db.Model):
             'id': self.id,
             'project_id': self.project_id,
             'git_branch': self.git_branch,
-            'builded_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            'builded_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.builded_at else self.builded_at,
         }
         return data
 
     def from_dict(self, data):
-        for field in ['project_id', 'git_branch']:
+        for field in ['project_id', 'git_branch', 'builded_at']:
             if field in data:
                 setattr(self, field, data[field])
