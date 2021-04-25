@@ -11,3 +11,4 @@ from . import login
 from . import user
 from . import task
 from . import ping
+from . import build_history
