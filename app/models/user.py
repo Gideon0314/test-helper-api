@@ -44,11 +44,10 @@ class User(PaginatedAPIMixin, db.Model):
             'exp': now + timedelta(seconds=expires_in),
             'iat': now
         }
-        print(payload)
         return jwt.encode(
             payload,
             current_app.config['SECRET_KEY'],
-            algorithm='HS256').decode('utf-8')
+            algorithm='HS256')
 
     @staticmethod
     def verify_jwt(token):

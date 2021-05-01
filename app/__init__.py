@@ -16,7 +16,7 @@ def create_app():
     register_blueprint(app)
     CORS(app)
     db.init_app(app)
-    # db.create_all(app=app)
+    db.create_all(app=app)
     return app
 
 
