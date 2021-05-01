@@ -14,6 +14,7 @@ from . import bp
 def project_list():
     """ 项目列表 """
     filterlist = []
+    id = request.args.get('id')
     page = int(request.args.get('page'))
     per_page = int(request.args.get('limit'))
     project = request.args.get('project', '')
@@ -23,6 +24,8 @@ def project_list():
         filterlist.append(Project.project.like('%' + project + '%'))
     if env:
         filterlist.append(Project.env == env)
+    if id:
+        filterlist.append(Project.id == id)
     data = Project.query.filter(*filterlist)
     if project is None and env is None:
         data = Project.query.filter_by(is_valid=True)
