@@ -5,6 +5,7 @@ from . import db, PaginatedAPIMixin
 
 class Project(PaginatedAPIMixin, db.Model):
     """ 项目列表 """
+
     __tablename__ = 'project'
 
     id = db.Column(db.String(128), primary_key=True, default=uuid.uuid4, nullable=False, unique=True)
