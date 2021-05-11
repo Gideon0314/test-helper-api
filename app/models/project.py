@@ -6,12 +6,12 @@ from . import db, PaginatedAPIMixin
 class Project(PaginatedAPIMixin, db.Model):
     """ 项目列表 """
     __tablename__ = 'project'
-    
+
     id = db.Column(db.String(128), primary_key=True, default=uuid.uuid4, nullable=False, unique=True)
     # 项目名称
-    project = db.Column(db.String(128), nullable=False)
+    project = db.Column(db.String(128), nullable=False, comment='项目名称')
     # 项目环境（开发/测试/预生产/生产）
-    env = db.Column(db.String(128), nullable=False)
+    env = db.Column(db.String(128), nullable=False, comment='0:开发,1:测试,2:预生产,3:生产')
     # 项目版本
     version = db.Column(db.String(128))
     # 项目Swagger地址
