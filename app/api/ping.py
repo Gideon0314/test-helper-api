@@ -7,10 +7,10 @@ def ping():
     '''前端Vue.js用来测试与后端Flask API的连通性'''
     return jsonify({
             "data": {
-                'a': 200000,
-                'b': 200000,
-                'c': 200000,
-                'd': 200000,
+                'a': 5,
+                'b': 223,
+                'c': 23,
+                'd': 23,
             },
             "status": 200
         })
@@ -50,43 +50,34 @@ def ping2():
             "status": 200,
             "message": "成功",
             "data": {
-                "nameAndValueList": [{
-                    "name": "Java",
-                    "value": 10000
-                },
+                "nameAndValueList": [
                     {
-                        "name": "人工智能",
-                        "value": 10000
+                        "name": "全球赢",
+                        "value": 32
                     },
                     {
-                        "name": "前端",
-                        "value": 10000
+                        "name": "Ework",
+                        "value": 13
                     },
                     {
-                        "name": "区块链",
-                        "value": 10000
+                        "name": "SkyCloud",
+                        "value": 4
                     },
                     {
-                        "name": "大数据",
-                        "value": 10000
+                        "name": "SkyTree",
+                        "value": 3
                     },
                     {
-                        "name": "游戏",
-                        "value": 10000
+                        "name": "智能投放",
+                        "value": 32
                     },
-                    {
-                        "name": "移动端",
-                        "value": 10000
-                    }
                     ],
                     "nameList": [
-                        "Java",
-                        "人工智能",
-                        "前端",
-                        "区块链",
-                        "大数据",
-                        "游戏",
-                        "移动端"
+                        "全球赢",
+                        "Ework",
+                        "SkyCloud",
+                        "SkyTree",
+                        "智能投放",
                     ]
                 }
             }
