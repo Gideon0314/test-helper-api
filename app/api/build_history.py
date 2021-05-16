@@ -12,7 +12,8 @@ from app.models.project import Project
 def build_history():
     '''构建记录'''
     data = request.get_json()
-    if Project.query.filter_by(id=data.get('id', None), is_valid=True).first():
+    project_info = Project.query.filter_by(id=data.get('project_id', None), is_valid=True).first()
+    if project_info is None:
         return bad_request('项目不存在')
     data['builded_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     builded_info = BuildHistory()
