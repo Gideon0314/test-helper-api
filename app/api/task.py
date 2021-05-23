@@ -1,16 +1,37 @@
 # -*- coding: UTF-8 -*-
+import re
 from datetime import datetime
 from flask import request, jsonify
 from app import db
-from app.api.errors import bad_request, error_response, not_found_error
+from app.api.errors import bad_request
+from app.api.errors import error_response
+from app.api.errors import not_found_error
 from app.models.task import Task
+from app.task import scheduler
+from app.task import test
 from . import bp
+from ..task.test import my_job
 
 
 @bp.route('/task/list', methods=['GET'])
 def task_list():
     """ 任务列表 """
     filterlist = []
+    jobs = scheduler.get_jobs()
+    l = []
+    d = []
+    data = str(jobs)
+    list = data.split(',')
+    for i in list:
+        r = re.findall(r'\((id=.+ name=.+)\)', i)
+        r = r[0].split(' ')
+        for i in r:
+            r = i.split('=')
+            l.append(r)
+        dd = dict(l)
+        d.append(dd)
+    # return d
+
     page = int(request.args.get('page'))
     per_page = int(request.args.get('limit'))
     task_name = request.args.get('task_name', '')
@@ -26,73 +47,82 @@ def task_list():
     data = Task.to_collection_dict(data, page, per_page, 'web.task_list')
     return jsonify(data)
 
-@bp.route('/task/add', methods=['POST'])
-def task_add():
-    """ 任务添加 """
-    data = request.get_json()
-    if Task.query.filter_by(task_name=data.get('task_name', None), is_valid=True).first():
-        return bad_request('任务已存在')
-    data['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    task_data = Task()
-    task_data.from_dict(data)
-    db.session.add(task_data)
-    db.session.commit()
-    return jsonify(
-        {
-            "status": 200,
-            "data": "success"
-        }
-        )
 
-@bp.route('/task/update', methods=['POST'])
-def task_edit():
-    """任务编辑"""
-    task_data = request.get_json()
-    task_id = task_data['id']
-    task_info = Task.query.filter_by(id=task_id, is_valid=True).first()
-    if task_info is None:
-        return not_found_error(404)
-    task_info.from_dict(task_data)
-    db.session.commit()
-    return jsonify(
-        {
-            "status": 200,
-            "data": "success"
-        }
-        )
+# 新增job
+@bp.route('/addCron', methods=['post'])
+def add_cron():
+    jobargs = request.get_json()
+    id = jobargs['task_id']
+    name = jobargs['name']
+    trigger_type = jobargs['trigger_type']
+    if trigger_type == "date":
+        run_time = jobargs['run_time']
+        job = scheduler.add_job(func=my_job,
+                                trigger=trigger_type,
+                                run_date=run_time,
+                                replace_existing=True,
+                                coalesce=True,
+                                id=id,
+                                name=name)
+        print("添加一次性任务成功---[ %s ] " % id)
+    elif trigger_type == 'interval':
+        seconds = jobargs['interval_time']
+        seconds = int(seconds)
+        if seconds <= 0:
+            raise TypeError('请输入大于0的时间间隔！')
+        scheduler.add_job(func=my_job,
+                          trigger=trigger_type,
+                          seconds=seconds,
+                          replace_existing=True,
+                          coalesce=True,
+                          id=id,
+                          name=name)
+    elif trigger_type == "cron":
+        day_of_week = jobargs["run_time"]["day_of_week"]
+        hour = jobargs["run_time"]["hour"]
+        minute = jobargs["run_time"]["minute"]
+        second = jobargs["run_time"]["second"]
+        scheduler.add_job(func=my_job, id=id, name=name, trigger=trigger_type, day_of_week=day_of_week,
+                          hour=hour, minute=minute,
+                          second=second, replace_existing=True)
+        print("添加周期执行任务成功任务成功---[ %s ] " % id)
+    return jsonify(msg="新增任务成功")
 
-@bp.route('/task/delete', methods=['DELETE'])
-def task_del():
-    """任务删除"""
-    task_id = request.get_json()['id']
-    task = Task.query.filter_by(id=task_id, is_valid=True).first()
-    if task is None:
-        return error_response(403)
-    task.is_valid = False
-    db.session.add(task)
-    db.session.commit()
-    return jsonify(
-        {
-            "status": 200,
-            "data": "success"
-        }
-        )
+# 暂停
+@bp.route('/<task_id>/pause',methods=['GET'])
+def pause_job(task_id):
+    response = {'status': False}
+    try:
+        scheduler.pause_job(task_id)
+        response['status'] = True
+        response['msg'] = "job[%s] pause success!" % task_id
+    except Exception as e:
+        response['msg'] = str(e)
+    return jsonify(response)
 
-@bp.route('/task', methods=['GET'])
-def task_board():
-    """任务看板"""
-    id = request.args.get('id')
-    # task_id = request.get_json()['id']
-    print(id)
-    task = Task.query.filter_by(id=id, is_valid=True).first()
-    # if task is None:
-    #     return error_response(403)
-    # task.is_valid = False
-    # db.session.add(task)
-    # db.session.commit()
-    return jsonify(
-        {
-            "status": 200,
-            "data": "success"
-        }
-        )
+#启动
+@bp.route('/<task_id>/resume',methods=['GET'])
+def resume_job(task_id):
+    response = {'status': False}
+    try:
+        scheduler.resume_job(task_id)
+        response['status'] = True
+        response['msg'] = "job[%s] resume success!" % task_id
+    except Exception as e:
+        response['msg'] = str(e)
+    return jsonify(response)
+
+#启动
+@bp.route('/<task_id>/info',methods=['GET'])
+def get_jobinfo(task_id):
+    response = {'status': False}
+    try:
+        ret_list = scheduler.get_job(task_id)
+        jobs = scheduler.get_jobs()
+        # jobss = scheduler.print_jobs()
+        print(jobs)
+        # print(jobss)
+        print(ret_list)
+    except Exception as e:
+        response['msg'] = str(e)
+    return jsonify(response)

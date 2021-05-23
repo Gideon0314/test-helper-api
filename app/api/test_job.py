@@ -16,7 +16,7 @@ def web_jobs():
     return jsonify(
         {
             "status": 200,
-            'msg': 'Two jobs was launched in background!'
+            'msg': 'jobs was launched in background!'
         }
         )
 
@@ -28,7 +28,7 @@ def api_jobs():
     return jsonify(
         {
             "status": 200,
-            'msg': 'Two jobs was launched in background!'
+            'msg': 'jobs was launched in background!'
         }
         )
 
