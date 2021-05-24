@@ -29,7 +29,7 @@ def add_task(data):
 
 def test_aps():
     data = {
-	"task_id": "2",
+	"task_id": "1",
     "task_name": "每日询盘监测",
     "remark": "定时发送表单及邮件询盘",
     "env": "3",

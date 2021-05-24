@@ -82,7 +82,7 @@ def add_cron():
     trigger_type = jobargs['trigger_type']
     if trigger_type == "date":
         run_time = jobargs['run_time']
-        job = scheduler.add_job(func='my_job',
+        job = scheduler.add_job(func=my_job,
                                 trigger=trigger_type,
                                 run_date=run_time,
                                 replace_existing=True,
@@ -122,6 +122,7 @@ def add_cron():
         print("添加周期执行任务成功任务成功---[ %s ] " % id)
     return jsonify(msg="新增任务成功")
 
+
 # 暂停
 @bp.route('/<task_id>/pause',methods=['GET'])
 def pause_job(task_id):
@@ -133,6 +134,7 @@ def pause_job(task_id):
     except Exception as e:
         response['msg'] = str(e)
     return jsonify(response)
+
 
 #启动
 @bp.route('/<task_id>/resume',methods=['GET'])
@@ -146,7 +148,7 @@ def resume_job(task_id):
         response['msg'] = str(e)
     return jsonify(response)
 
-#启动
+
 @bp.route('/<task_id>/info',methods=['GET'])
 def get_jobinfo(task_id):
     response = {'status': False}
