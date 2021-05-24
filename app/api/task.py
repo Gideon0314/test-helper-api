@@ -124,33 +124,49 @@ def add_cron():
 
 
 # 暂停
-@bp.route('/pause/<task_id>',methods=['GET'])
-def pause_job(task_id):
+@bp.route('/pause/task',methods=['GET'])
+def pause_job():
+    task_id = request.args.get('task_id')
     response = {'status': False}
     try:
         scheduler.pause_job(task_id)
         response['status'] = True
         response['msg'] = "job[%s] pause success!" % task_id
+        task = Task.query.filter(Task.task_id == task_id).first()
+        task.status = 0
+        db.session.commit()
     except Exception as e:
         response['msg'] = str(e)
-    return jsonify(response)
+    return jsonify({
+            "status": 200,
+            "data": "success"
+        })
 
 
 #启动
-@bp.route('/resume/<task_id>',methods=['GET'])
-def resume_job(task_id):
+@bp.route('/resume/task',methods=['GET'])
+def resume_job():
+    task_id = request.args.get('task_id')
     response = {'status': False}
     try:
         scheduler.resume_job(task_id)
         response['status'] = True
         response['msg'] = "job[%s] resume success!" % task_id
+        task = Task.query.filter(Task.task_id == task_id).first()
+        task.status = 1
+        db.session.commit()
     except Exception as e:
         response['msg'] = str(e)
-    return jsonify(response)
+    print(response)
+    return ({
+            "status": 200,
+            "data": "success"
+        })
 
 
-@bp.route('/info/<task_id>',methods=['GET'])
-def get_jobinfo(task_id):
+@bp.route('/info/task',methods=['GET'])
+def get_jobinfo():
+    task_id = request.args.get('task_id')
     response = {'status': False}
     try:
         print(type(task_id))
