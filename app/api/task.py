@@ -124,7 +124,7 @@ def add_cron():
 
 
 # 暂停
-@bp.route('/<task_id>/pause',methods=['GET'])
+@bp.route('/pause/<task_id>',methods=['GET'])
 def pause_job(task_id):
     response = {'status': False}
     try:
@@ -137,7 +137,7 @@ def pause_job(task_id):
 
 
 #启动
-@bp.route('/<task_id>/resume',methods=['GET'])
+@bp.route('/resume/<task_id>',methods=['GET'])
 def resume_job(task_id):
     response = {'status': False}
     try:
@@ -149,7 +149,7 @@ def resume_job(task_id):
     return jsonify(response)
 
 
-@bp.route('/<task_id>/info',methods=['GET'])
+@bp.route('/info/<task_id>',methods=['GET'])
 def get_jobinfo(task_id):
     response = {'status': False}
     try:
