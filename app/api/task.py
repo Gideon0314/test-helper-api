@@ -126,7 +126,7 @@ def add_cron():
 
 
 # 暂停
-@bp.route('/pause/task',methods=['GET'])
+@bp.route('/pause/task', methods=['GET'])
 def pause_job():
     task_id = request.args.get('task_id')
     response = {'status': False}
@@ -148,7 +148,7 @@ def pause_job():
 
 
 #启动
-@bp.route('/resume/task',methods=['GET'])
+@bp.route('/resume/task', methods=['GET'])
 def resume_job():
     task_id = request.args.get('task_id')
     response = {'status': False}
@@ -169,18 +169,18 @@ def resume_job():
         })
 
 
-@bp.route('/info/task',methods=['GET'])
+@bp.route('/info/task', methods=['GET'])
 def get_jobinfo():
-    task_id = request.args.get('task_id')
+    # task_id = request.args.get('task_id')
     response = {'status': False}
     try:
-        print(type(task_id))
-        ret_list = scheduler.get_job(task_id)
+        # print(type(task_id))
+        # ret_list = scheduler.get_job(task_id)
         jobs = scheduler.get_jobs()
         # jobss = scheduler.print_jobs()
         print(jobs)
         # print(jobss)
-        print(ret_list)
+        # print(ret_list)
     except Exception as e:
         response['msg'] = str(e)
     return jsonify(response)
