@@ -10,3 +10,4 @@ accesslog = '/home/www/logs/gunicorn_acess.log'
 errorlog = '/home/www/logs/gunicorn_error.log'
 # 设置日志记录水平
 loglevel = 'warning'
+preload_app = True
