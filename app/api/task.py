@@ -182,6 +182,7 @@ def resume_job():
         task = Task.query.filter(Task.task_id == task_id).first()
         task.status = 1
         db.session.commit()
+
     except Exception as e:
         response['msg'] = str(e)
     print(response)
