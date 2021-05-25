@@ -1,7 +1,7 @@
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
 
-class DevelopmentConfig():
+class ApsConfig():
     HOSTNAME = '123.56.117.178'
     PORT = '3306'
     DATABASE = 'test_helper'
