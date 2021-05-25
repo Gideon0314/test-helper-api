@@ -179,8 +179,14 @@ def get_jobinfo():
         jobs = scheduler.get_jobs()
         # jobss = scheduler.print_jobs()
         print(jobs)
+        response['jobs'] = jobs
         # print(jobss)
         # print(ret_list)
     except Exception as e:
         response['msg'] = str(e)
-    return jsonify(response)
+    return jsonify(
+        {
+        "status": 200,
+        "data": "success",
+        'response': response
+    })
