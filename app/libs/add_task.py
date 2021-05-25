@@ -29,7 +29,7 @@ def add_task(data):
 
 def test_aps():
     data = {
-	"task_id": "1",
+	"task_id": "2",
     "task_name": "每日询盘监测",
     "remark": "定时发送表单及邮件询盘",
     "env": "3",
@@ -40,7 +40,8 @@ def test_aps():
     headers = {
         "Content-Type": "application/json;charset=UTF-8",
     }
-    url = 'http://localhost:81/api/addCron'
+    url = 'http://gideon.fun:5000/api/addCron'
+    # url = 'http://localhost:81/api/addCron'
     r = requests.post(url=url, data=json.dumps(data), headers=headers)
     if r.status_code == 200:
         print(r.json)
