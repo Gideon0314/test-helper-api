@@ -5,7 +5,7 @@ import requests
 
 
 def my_job():
-    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=d855bbd4-eacf-4d1a-8da4-ab2d71ef250e'
+    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=cb47d771-e6fd-49e4-9df7-39ff1eb634e2'
     data = {
         "msgtype": "markdown",
         "markdown": {

@@ -18,7 +18,7 @@ def create_app():
     CORS(app)
     db.init_app(app)
     db.create_all(app=app)
-    # scheduler.init_app(app)
+    scheduler.init_app(app)
     scheduler.start()
     return app
 

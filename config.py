@@ -6,6 +6,7 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
 
+
 DEBUG = os.environ.get('FLASK_DEBUG')
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
