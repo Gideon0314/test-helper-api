@@ -3,7 +3,6 @@ from flask import Flask
 from flask_cors import CORS
 from app.models import db
 from app.api import bp
-from app.setting import ApsConfig
 from app.task import scheduler
 
 
@@ -13,14 +12,13 @@ __author__ = 'Gideon'
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config')
-    # Session(app)
-    app.config.from_object(ApsConfig())
-    register_blueprint(app)
-    CORS(app)
-    db.init_app(app)
+    db.init_app(app=app)
     db.create_all(app=app)
+    # Session(app)
     scheduler.init_app(app)
     scheduler.start()
+    register_blueprint(app)
+    CORS(app)
     return app
 
 

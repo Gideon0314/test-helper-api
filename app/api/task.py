@@ -2,7 +2,6 @@
 import re
 from datetime import datetime
 from pprint import pprint
-
 from flask import request, jsonify
 from app import db
 from app.api.errors import bad_request
