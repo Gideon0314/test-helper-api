@@ -138,7 +138,7 @@ def add_cron():
                               replace_existing=True)
             response['status'] = True
             add_task(jobargs)
-            print("添加周期执行任务成功任务成功---[ %s ] " % id)
+            print("添加周期执行任务成功任务成功---[ %s ]" % id)
         except Exception as e:
             response['msg'] = str(e)
     return jsonify({
