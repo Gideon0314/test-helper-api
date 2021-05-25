@@ -1,7 +1,7 @@
 # 定义同时开启的处理请求的进程数量，根据网站流量适当调整
 workers = 5
 # 采用gevent库，支持异步处理请求，提高吞吐量
-worker_class = "gevent"
+worker_class = "eventlet"
 # 监听内网5000端口
 bind = "0.0.0.0:5000"
 # debug = False
