@@ -8,11 +8,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
 
 
-DEBUG = os.environ.get('FLASK_DEBUG')
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
 
 class Config():
+
+    DEBUG = os.environ.get('FLASK_DEBUG')
+
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 #     pass
     # HOSTNAME = ''
     HOSTNAME = '123.56.117.178'
