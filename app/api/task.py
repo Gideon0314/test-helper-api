@@ -142,7 +142,8 @@ def pause_job():
     pprint(response)
     return jsonify({
             "status": 200,
-            "data": "success"
+            "data": "success",
+            'response': response
         })
 
 
@@ -163,7 +164,8 @@ def resume_job():
     print(response)
     return ({
             "status": 200,
-            "data": "success"
+            "data": "success",
+            'response': response
         })
 
 
