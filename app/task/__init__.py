@@ -15,6 +15,7 @@ def add_job(**kwargs):
     except Exception as e:
         response['msg'] = str(e)
 
+
 def pause_job():
     pass
 
