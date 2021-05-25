@@ -62,4 +62,4 @@ WTForms
 yagmail==0.14.245
 flask-apscheduler
 gevent
-eventlet
+eventlet==0.30.2
