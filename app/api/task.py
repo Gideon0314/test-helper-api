@@ -77,51 +77,75 @@ def task_list():
 # 新增job
 @bp.route('/addCron', methods=['post'])
 def add_cron():
+    job = {}
+    response = {'status': False}
     jobargs = request.get_json()
     id = jobargs['task_id']
     name = jobargs['task_name']
     trigger_type = jobargs['trigger_type']
     if trigger_type == "date":
         run_time = jobargs['run_time']
-        job = scheduler.add_job(func=my_job,
-                                trigger=trigger_type,
-                                run_date=run_time,
-                                replace_existing=True,
-                                coalesce=True,
-                                id=id,
-                                name=name)
-        add_task(jobargs)
-        print("添加一次性任务成功---[ %s ] " % id)
+
+        try:
+            scheduler.add_job(func=my_job,
+                              trigger=trigger_type,
+                              run_date=run_time,
+                              replace_existing=True,
+                              coalesce=True,
+                              id=id,
+                              name=name)
+            response['status'] = True
+            response['msg'] = "job[%s] addjob success!" % id
+            add_task(jobargs)
+            print("添加一次性任务成功---[ %s ] " % id)
+
+        except Exception as e:
+            response['msg'] = str(e)
+
     elif trigger_type == 'interval':
         seconds = jobargs['interval_time']
         seconds = int(seconds)
         if seconds <= 0:
             raise TypeError('请输入大于0的时间间隔！')
-        scheduler.add_job(func=my_job,
-                          trigger=trigger_type,
-                          seconds=seconds,
-                          replace_existing=True,
-                          coalesce=True,
-                          id=id,
-                          name=name)
-        add_task(jobargs)
+        try:
+            scheduler.add_job(func=my_job,
+                              trigger=trigger_type,
+                              seconds=seconds,
+                              replace_existing=True,
+                              coalesce=True,
+                              id=id,
+                              name=name)
+            response['status'] = True
+            add_task(jobargs)
+            print("添加周期执行任务成功任务成功---[ %s ] " % id)
+        except Exception as e:
+            response['msg'] = str(e)
+
     elif trigger_type == "cron":
         day_of_week = jobargs["run_time"]["day_of_week"]
         hour = jobargs["run_time"]["hour"]
         minute = jobargs["run_time"]["minute"]
         second = jobargs["run_time"]["second"]
-        scheduler.add_job(func=my_job,
-                          id=id,
-                          name=name,
-                          trigger=trigger_type,
-                          day_of_week=day_of_week,
-                          hour=hour,
-                          minute=minute,
-                          second=second,
-                          replace_existing=True)
-        add_task(jobargs)
-        print("添加周期执行任务成功任务成功---[ %s ] " % id)
-    return jsonify(msg="新增任务成功")
+        try:
+            scheduler.add_job(func=my_job,
+                              id=id,
+                              name=name,
+                              trigger=trigger_type,
+                              day_of_week=day_of_week,
+                              hour=hour,
+                              minute=minute,
+                              second=second,
+                              replace_existing=True)
+            response['status'] = True
+            add_task(jobargs)
+            print("添加周期执行任务成功任务成功---[ %s ] " % id)
+        except Exception as e:
+            response['msg'] = str(e)
+    return jsonify({
+            "status": 200,
+            "data": "success",
+            'response': response
+        })
 
 
 # 暂停

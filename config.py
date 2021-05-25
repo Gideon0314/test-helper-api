@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 import os
-from dotenv import load_dotenv
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from dotenv import load_dotenv
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'), encoding='utf-8')
@@ -30,6 +31,7 @@ SCHEDULER_API_ENABLED = True
 SCHEDULER_JOBSTORES = {
     'default': SQLAlchemyJobStore(SQLALCHEMY_DATABASE_URI)
 }
+
 SCHEDULER_TIMEZONE = 'Asia/Shanghai'
 
 # SESSION_TYPE = 'sqlalchemy'
