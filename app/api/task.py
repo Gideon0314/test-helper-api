@@ -87,6 +87,7 @@ def add_cron():
         run_time = jobargs['run_time']
 
         try:
+            scheduler.start()
             scheduler.add_job(
                 jobstore='default',
                 func=my_job,
@@ -110,6 +111,7 @@ def add_cron():
         if seconds <= 0:
             raise TypeError('请输入大于0的时间间隔！')
         try:
+            scheduler.start()
             scheduler.add_job(
                 jobstore='default',
                 func=my_job,
@@ -131,6 +133,7 @@ def add_cron():
         minute = jobargs["run_time"]["minute"]
         second = jobargs["run_time"]["second"]
         try:
+            scheduler.start()
             scheduler.add_job(
                 jobstore='default',
                 func=my_job,
