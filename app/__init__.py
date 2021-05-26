@@ -20,6 +20,7 @@ def create_app(config_class=None):
         configure_logging(app)
         register_blueprint(app)
         scheduler.init_app(app)
+        from app.task import test_task
         scheduler.start()
         return app
     except Exception as e:
@@ -48,6 +49,7 @@ def configure_extensions(app):
 
 def configure_logging(app):
     """Configure Logging."""
+    logging.getLogger("apscheduler").setLevel(logging.INFO)
     if not app.debug and not app.testing:
         if app.config['LOG_TO_STDOUT']:
             stream_handler = logging.StreamHandler()
