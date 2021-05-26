@@ -228,7 +228,7 @@ def get_jobinfo():
         jobs = scheduler.get_jobs()
         # jobss = scheduler.print_jobs()
         print(jobs)
-        response['jobs'] = jobs
+        response['jobs'] = str(jobs)
         # print(jobss)
         # print(ret_list)
     except Exception as e:
