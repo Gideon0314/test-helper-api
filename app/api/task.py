@@ -10,8 +10,21 @@ from app.api.errors import not_found_error
 from app.libs.add_task import add_task
 from app.models.task import Task
 from app.extensions import scheduler
+from config import Config
 from . import bp
 from app.task.test_task import my_job
+
+
+@bp.route('/env', methods=['GET'])
+def test_env():
+    # print(app.Config)
+    SCHEDULER_API_ENABLED = Config().SCHEDULER_API_ENABLED
+    return jsonify(
+            {
+                'SCHEDULER_API_ENABLED': SCHEDULER_API_ENABLED,
+                'status': '200'
+            }
+        )
 
 
 @bp.route('/start_aps', methods=['GET'])

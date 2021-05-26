@@ -13,19 +13,15 @@ __author__ = 'Gideon'
 
 
 def create_app(config_class=None):
-    try:
-        app = Flask(__name__)
-        configure_app(app, config_class)
-        configure_extensions(app)
-        configure_logging(app)
-        register_blueprint(app)
-        # scheduler.init_app(app)
-        # from app.task import test_task
-        # scheduler.start()
-        return app
-    except Exception as e:
-        raise e
-
+    app = Flask(__name__)
+    configure_app(app, config_class)
+    configure_extensions(app)
+    configure_logging(app)
+    register_blueprint(app)
+    # scheduler.init_app(app)
+    # from app.task import test_task
+    # scheduler.start()
+    return app
 
 
 def configure_app(app, config_class):
