@@ -26,11 +26,12 @@ def start_aps():
             }
         )
     except Exception as e:
-        return jsonify(
-            {
-                'error': str(e)
-            }
-        )
+        raise e
+        # return jsonify(
+        #     {
+        #         'error': str(e)
+        #     }
+        # )
 
 
 @bp.route('/task/list', methods=['GET'])
