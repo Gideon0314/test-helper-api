@@ -4,6 +4,7 @@ from app.libs.add_task import add_task
 
 scheduler = APScheduler()
 
+
 def add_job(**kwargs):
     response = {'status': False}
     try:

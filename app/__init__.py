@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import logging
 from flask import Flask
 from flask_cors import CORS
 from app.models import db
@@ -16,6 +17,9 @@ def create_app():
     db.create_all(app=app)
     # Session(app)
     scheduler.init_app(app)
+    logging.basicConfig(format='%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s',
+                        level=logging.DEBUG)
+    logging.getLogger("apscheduler").setLevel(logging.INFO)
     from app.task import test_task
     scheduler.start()
     register_blueprint(app)

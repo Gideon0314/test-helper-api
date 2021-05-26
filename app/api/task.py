@@ -87,13 +87,15 @@ def add_cron():
         run_time = jobargs['run_time']
 
         try:
-            scheduler.add_job(func=my_job,
-                              trigger=trigger_type,
-                              run_date=run_time,
-                              replace_existing=True,
-                              coalesce=True,
-                              id=id,
-                              name=name)
+            scheduler.add_job(
+                jobstore='default',
+                func=my_job,
+                trigger=trigger_type,
+                run_date=run_time,
+                replace_existing=True,
+                coalesce=True,
+                id=id,
+                name=name)
             response['status'] = True
             response['msg'] = "job[%s] addjob success!" % id
             add_task(jobargs)
@@ -108,7 +110,9 @@ def add_cron():
         if seconds <= 0:
             raise TypeError('请输入大于0的时间间隔！')
         try:
-            scheduler.add_job(func=my_job,
+            scheduler.add_job(
+                jobstore='default',
+                func=my_job,
                               trigger=trigger_type,
                               seconds=seconds,
                               replace_existing=True,
@@ -127,7 +131,9 @@ def add_cron():
         minute = jobargs["run_time"]["minute"]
         second = jobargs["run_time"]["second"]
         try:
-            scheduler.add_job(func=my_job,
+            scheduler.add_job(
+                jobstore='default',
+                func=my_job,
                               id=id,
                               name=name,
                               trigger=trigger_type,
