@@ -227,7 +227,6 @@ def get_jobinfo():
         # ret_list = scheduler.get_job(task_id)
         jobs = scheduler.get_jobs()
         # jobss = scheduler.print_jobs()
-        print(jobs)
         response['jobs'] = str(jobs)
         # print(jobss)
         # print(ret_list)
