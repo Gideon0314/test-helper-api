@@ -12,9 +12,9 @@ bind = "0.0.0.0:5000"
 # # 设置日志记录水平
 loglevel = 'info'
 # 设置访问日志
-accesslog = '/usr/src/app/log/gunicorn_acess.log'
+accesslog = '/usr/src/app/logs/gunicorn_acess.log'
 #错误信息日志
-errorlog = '/usr/src/app/log/gunicorn_error.log'
+errorlog = '/usr/src/app/logs/gunicorn_error.log'
 #设置这个值为true 才会把打印信息记录到错误日志里
 capture_output = True
 # preload_app = True
