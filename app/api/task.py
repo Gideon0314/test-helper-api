@@ -114,7 +114,8 @@ def add_cron():
                 replace_existing=True,
                 coalesce=True,
                 id=id,
-                name=name)
+                name=name,
+            max_instances=1)
             response['status'] = True
             response['msg'] = "job[%s] addjob success!" % id
             add_task(jobargs)
@@ -137,7 +138,8 @@ def add_cron():
                               replace_existing=True,
                               coalesce=True,
                               id=id,
-                              name=name)
+                              name=name,
+            max_instances=1)
             response['status'] = True
             add_task(jobargs)
             print("添加周期执行任务成功任务成功---[ %s ] " % id)
@@ -160,7 +162,8 @@ def add_cron():
                               hour=hour,
                               minute=minute,
                               second=second,
-                              replace_existing=True)
+                              replace_existing=True,
+            max_instances=1)
             response['status'] = True
             add_task(jobargs)
             print("添加周期执行任务成功任务成功---[ %s ]" % id)
