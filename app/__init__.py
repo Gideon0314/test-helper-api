@@ -1,31 +1,63 @@
 # -*- coding: UTF-8 -*-
+import os
 import logging
+from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_cors import CORS
-from app.models import db
 from app.api import bp
+from app.models import db
 from app.task import scheduler
-from config import Config
+
 
 __author__ = 'Gideon'
 
 
-def create_app():
+def create_app(config_class=None):
     app = Flask(__name__)
-    app.config.from_object(Config())
-    db.init_app(app=app)
-    db.create_all(app=app)
-    # Session(app)
-    scheduler.init_app(app)
-    logging.basicConfig(format='%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s',
-                        level=logging.DEBUG)
-    logging.getLogger("apscheduler").setLevel(logging.INFO)
-    from app.task import test_task
-    scheduler.start()
+    configure_app(app, config_class)
+    configure_extensions(app)
+    configure_logging(app)
     register_blueprint(app)
-    CORS(app)
+    # scheduler.init_app(app)
+    # scheduler.start()
     return app
+
+
+def configure_app(app, config_class):
+    app.config.from_object(config_class)
+    # 不检查路由中最后是否有斜杠/
+    app.url_map.strict_slashes = False
 
 
 def register_blueprint(app):
     app.register_blueprint(bp, url_prefix='/api')
+
+
+def configure_extensions(app):
+    """Configures the extensions."""
+    # Enable CORS
+    CORS(app)
+    # Init Flask-SQLAlchemy
+    db.init_app(app=app)
+    db.create_all(app=app)
+
+
+def configure_logging(app):
+    """Configure Logging."""
+    if not app.debug and not app.testing:
+        if app.config['LOG_TO_STDOUT']:
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.INFO)
+            app.logger.addHandler(stream_handler)
+        else:
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
+            file_handler = RotatingFileHandler('logs/tester.log',
+                                               maxBytes=10240, backupCount=10)
+            file_handler.setFormatter(logging.Formatter(
+                '%(asctime)s %(levelname)s: %(message)s '
+                '[in %(pathname)s:%(lineno)d]'))
+            file_handler.setLevel(logging.INFO)
+            app.logger.addHandler(file_handler)
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('Flask API Startup')

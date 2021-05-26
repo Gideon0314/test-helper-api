@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from app import db
+from app.models import db
 from app.api import bp
 from flask import request, jsonify
 from datetime import datetime

@@ -2,7 +2,8 @@
 from datetime import datetime
 import requests
 from sqlalchemy import and_
-from app import db
+from app.models import db
+
 from app.models.api_docs import ApiDocs
 from app.models.definitions import Definitions
 from app.models.project import Project

@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from app.api.auth import basic_auth
 from flask import jsonify, g
-from app import db
+from app.models import db
 from . import bp
 
 

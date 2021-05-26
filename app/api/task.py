@@ -2,8 +2,8 @@
 import re
 from datetime import datetime
 from pprint import pprint
-from flask import request, jsonify
-from app import db
+from flask import request, jsonify, app
+from app.models import db
 from app.api.errors import bad_request
 from app.api.errors import error_response
 from app.api.errors import not_found_error
@@ -13,6 +13,25 @@ from app.task import scheduler
 from app.task import test_task
 from . import bp
 from ..task.test_task import my_job
+
+
+@bp.route('/start_aps', methods=['GET'])
+def start_aps():
+    try:
+        # scheduler.init_app(app)
+        scheduler.start()
+        return jsonify(
+            {
+                'msg': '定时任务开始成功',
+                'status': '200'
+            }
+        )
+    except Exception as e:
+        return jsonify(
+            {
+                'error': str(e)
+            }
+        )
 
 
 @bp.route('/task/list', methods=['GET'])
@@ -87,7 +106,6 @@ def add_cron():
         run_time = jobargs['run_time']
 
         try:
-            scheduler.start()
             scheduler.add_job(
                 jobstore='default',
                 func=my_job,
@@ -111,7 +129,6 @@ def add_cron():
         if seconds <= 0:
             raise TypeError('请输入大于0的时间间隔！')
         try:
-            scheduler.start()
             scheduler.add_job(
                 jobstore='default',
                 func=my_job,
@@ -133,7 +150,6 @@ def add_cron():
         minute = jobargs["run_time"]["minute"]
         second = jobargs["run_time"]["second"]
         try:
-            scheduler.start()
             scheduler.add_job(
                 jobstore='default',
                 func=my_job,

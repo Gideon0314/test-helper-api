@@ -4,7 +4,7 @@ import re
 from functools import wraps
 from datetime import datetime
 import requests
-from app import db
+from app.models import db
 from app.api.errors import bad_request
 from app.models.task import Task
 

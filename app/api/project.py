@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from datetime import datetime
 from flask import request, jsonify
-from app import db
+from app.models import db
 from app.api.auth import token_auth
 from app.api.errors import bad_request, error_response, not_found_error
 from app.models.project import Project
