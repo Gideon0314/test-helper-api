@@ -33,4 +33,3 @@ class Config():
     INQUIRY_EMAIL_LIST = []
     # 日志输出到控制台还是日志文件中
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT', 'false').lower() in ['true', 'on', '1']
-
