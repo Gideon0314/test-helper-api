@@ -9,8 +9,12 @@ bind = "0.0.0.0:5000"
 # daemon = True
 # 设置超时时间120s，默认为30s。按自己的需求进行设置
 # timeout = 120
-# accesslog = '/home/www/logs/gunicorn_acess.log'
-# errorlog = '/home/www/logs/gunicorn_error.log'
 # # 设置日志记录水平
-# loglevel = 'warning'
+loglevel = 'info'
+# 设置访问日志
+accesslog = '/usr/src/app/log/gunicorn_acess.log'
+#错误信息日志
+errorlog = '/usr/src/app/log/gunicorn_error.log'
+#设置这个值为true 才会把打印信息记录到错误日志里
+capture_output = True
 # preload_app = True
