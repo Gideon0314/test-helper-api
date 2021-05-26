@@ -34,6 +34,7 @@ class Config():
     SCHEDULER_JOBSTORES = {
         'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
     }
+
     # 线程池配置
     SCHEDULER_EXECUTORS = {
         'default': {'type': 'threadpool', 'max_workers': 10}

@@ -11,11 +11,12 @@ __author__ = 'Gideon'
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(Config())
     db.init_app(app=app)
     db.create_all(app=app)
     # Session(app)
     scheduler.init_app(app)
+    from app.task import test_task
     scheduler.start()
     register_blueprint(app)
     CORS(app)
