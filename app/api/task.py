@@ -9,8 +9,8 @@ from app.api.errors import error_response
 from app.api.errors import not_found_error
 from app.libs.add_task import add_task
 from app.models.task import Task
-from app.task import scheduler
 from app.task import test_task
+from app.extensions import scheduler
 from . import bp
 from ..task.test_task import my_job
 

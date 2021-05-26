@@ -1,8 +1,9 @@
-from flask_apscheduler import APScheduler
+
 # 实例APScheduler定时任务
+from app.extensions import scheduler
 from app.libs.add_task import add_task
 
-scheduler = APScheduler()
+
 
 
 def add_job(**kwargs):

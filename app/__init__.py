@@ -5,8 +5,8 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_cors import CORS
 from app.api import bp
+from app.extensions import scheduler
 from app.models import db
-from app.task import scheduler
 
 
 __author__ = 'Gideon'
@@ -18,8 +18,8 @@ def create_app(config_class=None):
     configure_extensions(app)
     configure_logging(app)
     register_blueprint(app)
-    # scheduler.init_app(app)
-    # scheduler.start()
+    scheduler.init_app(app)
+    scheduler.start()
     return app
 
 

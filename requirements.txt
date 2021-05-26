@@ -61,5 +61,6 @@ wrapt==1.12.1
 WTForms
 yagmail==0.14.245
 flask-apscheduler
+apscheduler
 gevent
 eventlet==0.30.2
