@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 import os
 import logging
-from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_cors import CORS
 from app.api import bp
-from app.extensions import scheduler
 from app.models import db
+from app.extensions import scheduler
+from logging.handlers import RotatingFileHandler
 
 
 __author__ = 'Gideon'
