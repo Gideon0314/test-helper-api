@@ -60,7 +60,7 @@ wincertstore==0.2
 wrapt==1.12.1
 WTForms
 yagmail==0.14.245
-flask-apscheduler
+flask-apscheduler==1.12.1
 apscheduler
 gevent
 eventlet==0.30.2

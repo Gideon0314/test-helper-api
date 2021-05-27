@@ -19,13 +19,12 @@ def create_app(config_class=None):
         configure_extensions(app)
         configure_logging(app)
         register_blueprint(app)
-        # scheduler.init_app(app)
-        # from app.task import test_task
-        # scheduler.start()
+        scheduler.init_app(app)
+        from app.task import test_task
+        scheduler.start()
         return app
     except Exception as e:
         raise e
-
 
 
 def configure_app(app, config_class):

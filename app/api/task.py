@@ -1,16 +1,11 @@
 # -*- coding: UTF-8 -*-
-import re
-from datetime import datetime
+from . import bp
 from pprint import pprint
-from flask import request, jsonify, app
+from flask import request, jsonify
 from app.models import db
-from app.api.errors import bad_request
-from app.api.errors import error_response
-from app.api.errors import not_found_error
 from app.libs.add_task import add_task
 from app.models.task import Task
 from app.extensions import scheduler
-from . import bp
 from app.task.test_task import my_job
 
 
