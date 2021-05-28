@@ -9,6 +9,20 @@ from app.extensions import scheduler
 from app.task.test_task import my_job
 
 
+@bp.route('/test_db', methods=['GET'])
+def test_db(task_id=1):
+    data = db.session.execute(f"select next_run_time from apscheduler_jobs where id = {task_id}")
+    data = [dict(zip(d.keys(), d)) for d in data]
+    print(data)
+    return jsonify(
+        {
+            'data': data,
+            'msg': '定时任务开始成功',
+            'status': '200'
+        }
+    )
+
+
 @bp.route('/start_aps', methods=['GET'])
 def start_aps():
     try:
@@ -103,7 +117,7 @@ def add_cron():
         try:
             scheduler.add_job(
                 jobstore='default',
-                func=my_job,
+                func='app.task.test_task:my_job',
                 trigger=trigger_type,
                 run_date=run_time,
                 replace_existing=True,
@@ -127,7 +141,7 @@ def add_cron():
         try:
             scheduler.add_job(
                 jobstore='default',
-                func=my_job,
+                func='app.task.test_task:my_job',
                               trigger=trigger_type,
                               seconds=seconds,
                               replace_existing=True,
@@ -149,7 +163,7 @@ def add_cron():
         try:
             scheduler.add_job(
                 jobstore='default',
-                func=my_job,
+                func='app.task.test_task:my_job',
                               id=id,
                               name=name,
                               trigger=trigger_type,

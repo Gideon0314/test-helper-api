@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import datetime
 import uuid
 from . import db, PaginatedAPIMixin
 
@@ -35,6 +36,7 @@ class Task(PaginatedAPIMixin, db.Model):
             'updated_at': self.updated_at.strftime("%Y-%m-%d %H:%M:%S") if self.updated_at else self.updated_at,
             'remark': self.remark,
             'status': self.status,
+            'next_run_time': self.next_run_time()
         }
         return data
 
@@ -42,3 +44,12 @@ class Task(PaginatedAPIMixin, db.Model):
         for field in ['task_id', 'task_name', 'env', 'status', 'remark']:
             if field in data:
                 setattr(self, field, data[field])
+
+    def next_run_time(self):
+        data = db.session.execute(f"select next_run_time from apscheduler_jobs where id = {self.task_id}")
+        time = [dict(zip(d.keys(), d)) for d in data][0]['next_run_time']
+        if time:
+            time = datetime.datetime.fromtimestamp(time)
+            dt = time.strftime("%Y-%m-%d %H:%M:%S")
+            return dt
+        return time

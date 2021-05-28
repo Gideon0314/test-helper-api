@@ -33,6 +33,22 @@ def api_jobs():
         )
 
 
+# @executor.job
+# def fib(n):
+#     if n <= 2:
+#         return 1
+#     else:
+#         return fib(n-1) + fib(n-2)
+#
+#
+# @bp.route('/decorate_fib')
+# def decorate_fib():
+#     fib.submit(5)
+#     fib.submit_stored('fib', 5)
+#     fib.map(range(1, 6))
+#     return 'OK'
+
+
 # @bp.route('/api_jobs', methods=['GET'])
 # def api_job():
 #     executor.submit(api_test)
