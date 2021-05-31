@@ -1,4 +1,7 @@
 # -*- coding: UTF-8 -*-
+import datetime
+
+from app.api.errors import bad_request
 from . import bp
 from pprint import pprint
 from flask import request, jsonify
@@ -200,11 +203,13 @@ def pause_job():
     except Exception as e:
         response['msg'] = str(e)
     pprint(response)
-    return jsonify({
-            "status": 200,
-            "data": "success",
-            'response': response
-        })
+    return ({
+        "status": 200,
+        "data": "success",
+        "task_status": 0,
+        "next_run_time": None,
+        "response": response
+    })
 
 
 #启动
@@ -219,15 +224,21 @@ def resume_job():
         task = Task.query.filter(Task.task_id == task_id).first()
         task.status = 1
         db.session.commit()
-
+        next_run_time = db.session.execute(f"select next_run_time from apscheduler_jobs where id = {task_id}")
+        next_run_time = [dict(zip(d.keys(), d)) for d in next_run_time][0]['next_run_time']
+        if next_run_time:
+            time = datetime.datetime.fromtimestamp(next_run_time)
+            time = time.strftime("%Y-%m-%d %H:%M:%S")
+            return ({
+                "status": 200,
+                "data": "success",
+                "task_status": 1,
+                "next_run_time": time,
+                "response": response
+            })
     except Exception as e:
         response['msg'] = str(e)
-    print(response)
-    return ({
-            "status": 200,
-            "data": "success",
-            'response': response
-        })
+    return (bad_request(response['msg']))
 
 
 @bp.route('/info/task', methods=['GET'])
